@@ -1,0 +1,58 @@
+.root {
+    -fx-background-color: white;
+}
+
+.label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.text-field {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-color: -fx-text-box-border, #1b2431;
+    -fx-background-insets: 0, 0 0 1 0 ;
+    -fx-background-radius: 0 ;
+    -fx-text-fill: rgb(128, 150, 224);
+}
+
+.text-field:focused {
+    -fx-background-color: #34ab44, #1b2431;
+    -fx-text-fill: rgb(128, 150, 224);
+}
+
+#welcometext {
+    -fx-font-size: 32px;
+    -fx-font-family: "Arial Black";
+    -fx-fill: rgb(128, 150, 224);
+}
+
+#actiontarget {
+    -fx-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-font-size: 18px;
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-background-color: rgba(114, 118, 222, 0.75);
+    -fx-background-radius: 20px;
+}
+.button:hover {
+    -fx-background-color: rgba(114, 118, 222, 1);
+    -fx-effect: dropshadow(three-pass-box, #72b9da, 10.0,0, 0, 0);
+    -fx-cursor: hand;
+}
+.button:pressed {
+    -fx-background-color: rgba(0, 0, 0, 0.75);
+}
+
+#ExitButton{
+    -fx-background-color: rgba(239, 34, 34, 0.75);
+}
+#ExitButton:hover{
+    -fx-background-color: rgba(239, 34, 34, 1);
+}

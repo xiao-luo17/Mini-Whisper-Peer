@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="822.0" style="-fx-background-color:#273142;-fx-border-color:rgb(122,123,140);-fx-border-width:3px;-fx-border-radius: 25px;-fx-background-radius: 25px;" stylesheets="/register.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.p2p.controller.RegisterController">
+   <children>
+       <Text fx:id="welcometext" layoutX="310.0" layoutY="93.0" text="Mini Whisper" />
+       <Label layoutX="186.0" layoutY="159.0" text="User Name:" />
+       <TextField fx:id="username" layoutX="328.0" layoutY="153.0" />
+       <Label layoutX="189.0" layoutY="226.0" text="IP Address:" />
+       <TextField fx:id="IPAddress" layoutX="328.0" layoutY="220.0" />
+       <Label layoutX="193.0" layoutY="288.0" text="Password:" />
+       <PasswordField fx:id="passwordField" layoutX="328.0" layoutY="282.0" />
+       <HBox alignment="bottom_right" spacing="10" />
+        <Button layoutX="486.0" layoutY="374.0" onAction="#SignInButtonAction" text="Sign In" />
+
+             <Text fx:id="actiontarget" layoutX="410.0" layoutY="459.0" />
+      <Button layoutX="328.0" layoutY="374.0" mnemonicParsing="false" onAction="#SignUpButtonAction" text="Sign up" />
+      <Button fx:id="ExitButton" layoutX="40.0" layoutY="434.0" mnemonicParsing="false" onAction="#ExitButtonAction" text="Exit" />
+      <ImageView fx:id="topImg" fitHeight="50.0" fitWidth="50.0" layoutX="237.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
+</AnchorPane>
