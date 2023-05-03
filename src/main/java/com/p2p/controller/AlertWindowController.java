@@ -1,7 +1,6 @@
 package com.p2p.controller;
 
 import com.p2p.View.ViewAlter;
-import com.p2p.util.ChatThread;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,17 +27,33 @@ public class AlertWindowController implements Initializable {
     private String alertMessage;
 
     public void acceptChatButtonAction(ActionEvent actionEvent) {
-        chatThread.setAcceptChat(true);
-        chatThread.notifyChatThread();
-        Stage stage = (Stage) refuseChat.getScene().getWindow();
-        stage.close();
+        if(CHAT_TYPE == RELAY_CHAT_TYPE){
+            chatTCPThread.setAcceptChat(true);
+            chatTCPThread.notifyChatTCPThread();
+            Stage stage = (Stage) refuseChat.getScene().getWindow();
+            stage.close();
+        }
+        if (CHAT_TYPE == UDP_CHAT_TYPE) {
+            chatUDPThread.setAcceptChat(true);
+            chatUDPThread.notifyChatUDPThread();
+            Stage stage = (Stage) refuseChat.getScene().getWindow();
+            stage.close();
+        }
     }
 
     public void refuseChatButtonAction(ActionEvent actionEvent) {
-        chatThread.setAcceptChat(false);
-        chatThread.notifyChatThread();
-        Stage stage = (Stage) refuseChat.getScene().getWindow();
-        stage.close();
+        if(CHAT_TYPE == RELAY_CHAT_TYPE){
+            chatTCPThread.setAcceptChat(true);
+            chatTCPThread.notifyChatTCPThread();
+            Stage stage = (Stage) refuseChat.getScene().getWindow();
+            stage.close();
+        }
+        if (CHAT_TYPE == UDP_CHAT_TYPE) {
+            chatUDPThread.setAcceptChat(false);
+            chatUDPThread.notifyChatUDPThread();
+            Stage stage = (Stage) refuseChat.getScene().getWindow();
+            stage.close();
+        }
     }
 
     public void setViewAlter(ViewAlter viewAlter) {

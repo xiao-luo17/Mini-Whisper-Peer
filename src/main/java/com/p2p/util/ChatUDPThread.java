@@ -9,7 +9,7 @@ import java.net.*;
 
 import static com.p2p.util.StaticResourcesConfig.*;
 
-public class ChatThread implements Runnable {
+public class ChatUDPThread implements Runnable {
 
     //每个用户进程登录成功时都开启了唯一的一个UDP端口，用于接收所有来自其他人的请求
     //ChatThread类只负责接收来自其他对等方的请求，存放到静态聊天列表，如果有一个新数据报来自一个不在列表中的IP地址和端口，就打开新窗口建立聊天
@@ -21,10 +21,7 @@ public class ChatThread implements Runnable {
     private boolean acceptChat = true;
     private ViewAlter viewAlter;
 
-    /**
-     * |自己的socket|对方的IP地址|对方的端口| 初始化线程
-     */
-    public ChatThread(DatagramSocket socket, ViewAlter viewAlter) {
+    public ChatUDPThread(DatagramSocket socket, ViewAlter viewAlter) {
         this.socket = socket;
         this.viewAlter = viewAlter;
     }
@@ -76,8 +73,8 @@ public class ChatThread implements Runnable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            controller.setReceiveData(getReceiveData(packet.getData()));
-                            notifyChatThread();
+                            controller.setReceiveData(getReceiveData(dataBuffer));
+                            notifyChatUDPThread();
                         }
                     });
                     wait();
@@ -117,7 +114,7 @@ public class ChatThread implements Runnable {
                                     viewAlter.createChatWindow(socket, inetsocketAddress, getReceiveName(dataBuffer));
                                     ChatWindowController controller = (ChatWindowController) viewAlter.getControllerByName(getReceiveName(dataBuffer));
                                     controller.setCommunicating(true);
-                                    notifyChatThread();
+                                    notifyChatUDPThread();
                                 }
                             });
                             wait();
@@ -136,7 +133,7 @@ public class ChatThread implements Runnable {
                     }
                 }
             } catch (IOException | InterruptedException e) {
-                System.err.println("[系统消息] 通过套接字异常退出线程 --- 退出ChatThread线程");
+                System.err.println("[系统消息] 通过套接字异常退出线程 --- 退出ChatUDPThread线程");
                 this.stop();
             }
 
@@ -158,7 +155,7 @@ public class ChatThread implements Runnable {
         return dataMessage.subSequence(index + 1, dataMessage.length()).toString();
     }
 
-    public synchronized void notifyChatThread() {
+    public synchronized void notifyChatUDPThread() {
         notify();
     }
 
@@ -169,7 +166,7 @@ public class ChatThread implements Runnable {
                 public void run() {
                     controller.setChatOtherName(name);
                     controller.setNoticeMessage(message);
-                    notifyChatThread();
+                    notifyChatUDPThread();
                 }
             });
             wait();
@@ -184,7 +181,7 @@ public class ChatThread implements Runnable {
                 @Override
                 public void run() {
                     controller.setCommunicating(isCommunicating);
-                    notifyChatThread();
+                    notifyChatUDPThread();
                 }
             });
             wait();

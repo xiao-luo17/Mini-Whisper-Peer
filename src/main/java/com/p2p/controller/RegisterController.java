@@ -60,6 +60,7 @@ public class RegisterController implements Initializable {
         String usernameText = username.getText();
         String ipAddressText = IPAddress.getText();
         String passwordFieldText = passwordField.getText();
+        serverIP = ipAddressText;
         if (usernameText.length() == 0 || ipAddressText.length() == 0 || passwordFieldText.length() == 0) {
             actiontarget.setText("必须输入注册名、密码和本地IP");
             return;
@@ -108,6 +109,7 @@ public class RegisterController implements Initializable {
         String usernameText = username.getText();
         String ipAddressText = IPAddress.getText();
         String passwordFieldText = passwordField.getText();
+        serverIP = ipAddressText;
         if (usernameText.length() == 0 || ipAddressText.length() == 0 || passwordFieldText.length() == 0) {
             actiontarget.setText("必须输入注册名、密码和本地IP");
             return;
@@ -164,7 +166,7 @@ public class RegisterController implements Initializable {
 
     @FXML
     void ExitButtonAction(ActionEvent actionEvent) {
-        viewAlter.WindowCloseEvent(isConnect);
+        viewAlter.WindowCloseEvent(isPeerConnect);
     }
 
     public void setTopImg() {
@@ -174,7 +176,6 @@ public class RegisterController implements Initializable {
     private void setFirstSetpipde() {
         if (firstSetpipde) {
             try {
-                //使用管道通信，让线程commWithServer可以和该类进行通信
                 PipedInputStream pipedI = new PipedInputStream();
                 PipedOutputStream pipedO = null;
                 pipedO = new PipedOutputStream(pipedI);

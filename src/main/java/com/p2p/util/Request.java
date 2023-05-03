@@ -8,6 +8,8 @@ public class Request implements Serializable {
     private String password;
     private int UDPPort;
     private String chatRegisterName;
+    private String relayMessage;
+    private int threadType;
 
     public Request(int requestType, String registerName) {
         this.requestType = requestType;
@@ -23,6 +25,17 @@ public class Request implements Serializable {
     public Request(int requestType, String registerName, String chatRegisterName) {
         this(requestType, registerName);
         this.chatRegisterName = chatRegisterName;
+    }
+
+    public Request(int requestType, String registerName, String chatRegisterName, String relayMessage) {
+        this(requestType, registerName);
+        this.chatRegisterName = chatRegisterName;
+        this.relayMessage = relayMessage;
+    }
+
+    public Request(int requestType, String registerName, int threadType) {
+        this(requestType, registerName);
+        this.threadType = threadType;
     }
 
     public int getRequestType() {
@@ -43,5 +56,13 @@ public class Request implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getRelayMessage() {
+        return relayMessage;
+    }
+
+    public int getThreadType() {
+        return threadType;
     }
 }

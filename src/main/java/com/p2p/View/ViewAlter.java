@@ -67,8 +67,11 @@ public class ViewAlter extends Application {
             chatList.setSocket(socket);
             chatList.setTopImg();
             //从列表程序获取到inetSocketAddress，转为inetAddress和port。开启用户聊天进程打开数据包和UPD端口
-            chatThread = new ChatThread(socket, this);
-            chatThread.start();
+            chatUDPThread = new ChatUDPThread(socket, this);
+            chatUDPThread.start();
+            chatTCPThread = new ChatTCPThread();
+            chatTCPThread.connect(serverIP,this);
+            chatTCPThread.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,7 +91,43 @@ public class ViewAlter extends Application {
             loader.setLocation(ViewAlter.class.getResource(CHATWINDOW_PATH));
 
             AnchorPane secondPane = loader.load(inputStream);
-            Scene secondScene = new Scene(secondPane, 822, 500);
+            Scene secondScene = new Scene(secondPane, 1200, 700);
+            secondStage.setScene(secondScene);
+            secondStage.show();
+            inputStream.close();
+            //加入队列
+            STAGE.put(stageName, secondStage);
+
+            ChatWindowController chatWindow = loader.getController();
+            chatWindow.setChatOtherName(stageName);
+            chatWindow.setSocket(socket);
+            chatWindow.setInetAddress(inetSocketAddress.getAddress());
+            chatWindow.setPort(inetSocketAddress.getPort());
+            chatWindow.setViewAlter(this);
+            //加入队列
+            CONTROLLER.put(stageName, chatWindow);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 弹出聊天窗口
+     */
+    public void createChatWindow(InetSocketAddress inetSocketAddress, String stageName) {
+        //开启用户聊天窗口，这个得在继承了application接口的类里进行，同时新将经过RegisterController中新建的ChatThread UDP监听线程加入
+        try {
+            Stage secondStage = new Stage();
+
+            FXMLLoader loader = new FXMLLoader();
+            InputStream inputStream = ViewAlter.class.getResourceAsStream(CHATWINDOW_PATH);
+            loader.setBuilderFactory(new JavaFXBuilderFactory());
+            loader.setLocation(ViewAlter.class.getResource(CHATWINDOW_PATH));
+
+            AnchorPane secondPane = loader.load(inputStream);
+            Scene secondScene = new Scene(secondPane, 1200, 700);
             secondStage.setScene(secondScene);
             secondStage.show();
             inputStream.close();
@@ -173,6 +212,12 @@ public class ViewAlter extends Application {
 
     public void WindowCloseEvent(boolean isConnect) {
         if(isConnect){
+//            chatTCPThread.TCPListening = false;
+//            chatTCPThread.notifyChatTCPThread();
+//            chatTCPThread.interrupt();
+//            chatTCPThread.close();
+//            chatTCPThread = null;
+
             peerThread.keepCommunicating = false;
             peerThread.notifyPeerThread();
             peerThread.interrupt();

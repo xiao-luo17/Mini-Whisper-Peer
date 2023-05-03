@@ -1,7 +1,5 @@
 package com.p2p.util;
 
-import javafx.application.Platform;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -23,13 +21,7 @@ public class PeerThread extends Thread {
     public InetAddress address;//服务器地址
     public boolean keepCommunicating = true;
 
-    /**
-     * connect方法，用服务器IP和请求报文进行连接
-     */
     public void connect(String serverIP, Request request, ObjectOutputStream pipedOut) throws IOException {
-        isConnect = true;
-        this.request = request;
-        this.pipedOut = pipedOut;
         address = InetAddress.getByName(serverIP);//获得IP地址
         //根据IP地址和端口创建套接字，端口号为服务器的端口号，以此连接到服务器
         InetSocketAddress serverSocketA = new InetSocketAddress(address, PORT);
@@ -39,6 +31,19 @@ public class PeerThread extends Thread {
         //获得服务器的输入，输出流，与服务器建立通信
         oos = new ObjectOutputStream(socket.getOutputStream());
         ois = new ObjectInputStream(socket.getInputStream());
+        //完成初次的线程建立
+        if (!isPeerConnect) {
+            try {
+                oos.writeObject(new Request(0, request.getRegisterName(), 1));//向信息服务器发生初始化线程请求
+                Response response = (Response) ois.readObject();
+                System.out.println("[系统消息] " + response.getMessage());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        isPeerConnect = true;
+        this.request = request;
+        this.pipedOut = pipedOut;
     }
 
     public void setRequest(Request request) {
@@ -51,6 +56,7 @@ public class PeerThread extends Thread {
 
     public synchronized void close() {
         try {
+            isPeerConnect = false;
             if (ois != null && oos != null) {
                 ois.close();
                 oos.close();

@@ -9,15 +9,27 @@ import java.util.Map;
 
 public class StaticResourcesConfig {
 
+    public static String serverIP;
     public static final int PORT = 8000;
     public static boolean isRegister = false;//判断是否已经登录
 
-    //PeerThread线程管理
-    public static PeerThread peerThread;
-    public static boolean isConnect = false;
+    //聊天消息处理模式 |relay服务端转发|  |UDP局域网直连|  |TCP局域网直连|  |UDP内网穿透|
+    public static int CHAT_TYPE = 1;
+    public static int RELAY_CHAT_TYPE = 1;//支持公网转发
+    public static int UDP_CHAT_TYPE = 2;//局域网直连
+    public static int TCP_CHAT_TYPE = 3;//局域网直连
+    public static int UDP_P2P_TYPE = 4;//锥形NAT下公网直连
 
-    //ChatThread线程管理
-    public static ChatThread chatThread;
+    //PeerThread线程管理 -- 请求发送线程
+    public static PeerThread peerThread;
+    public static boolean isPeerConnect = false;
+
+    //ChatTCPThread线程管理 -- relay模式接收线程
+    public static ChatTCPThread chatTCPThread;
+    public static boolean isTCPConnect = false;
+
+    //ChatUDPThread线程管理 -- UDP模式线程
+    public static ChatUDPThread chatUDPThread;
     public static DatagramSocket socket;
     //唯一UDP端口号
     public static int UDPPort;
@@ -27,8 +39,8 @@ public class StaticResourcesConfig {
     public static double yOffset = 0;
 
     //窗口管理
-    public static Map<String, Stage> STAGE = new HashMap<String, Stage>();
-    public static Map<String, Object> CONTROLLER = new HashMap<String, Object>();
+    public static Map<String, Stage> STAGE = new HashMap<>();
+    public static Map<String, Object> CONTROLLER = new HashMap<>();
 
     //fxml文件路径
     public static String REGISTER_PATH = "/register.fxml";
@@ -62,7 +74,10 @@ public class StaticResourcesConfig {
      * 登录请求
      */
     public static final int SIGN_IN = 5;
-
+    /**
+     * 服务端转发请求
+     */
+    public static final int CHAT_RELAY = 6;
 
     //响应代码，标识接收方需要准备的响应类型
     /**
@@ -78,8 +93,7 @@ public class StaticResourcesConfig {
      */
     public static final int IP_ADDRESS_TYPE = 3;
     /**
-     * String退出响应
+     * 消息转发响应
      */
-    public static final int LOGOUT = 4;
-
+    public static final int RELAY_MESSAGE_TYPE = 4;
 }

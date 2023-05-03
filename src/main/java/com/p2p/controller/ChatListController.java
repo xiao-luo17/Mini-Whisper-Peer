@@ -36,6 +36,10 @@ import static com.p2p.util.StaticResourcesConfig.*;
 public class ChatListController implements Initializable {
 
     @FXML
+    private ToggleButton udpMod;
+    @FXML
+    private ToggleButton relayMod;
+    @FXML
     private ImageView topImg;
     @FXML
     private TextArea NoticeMessage;
@@ -86,7 +90,6 @@ public class ChatListController implements Initializable {
             peerThread.setRequest(request);
             peerThread.setPipedOut(pipedOut);
             peerThread.notifyPeerThread();
-            ;
             response = (Response) pipedIn.readObject();
             //从响应中得到在线的P2P端注册名列表
             Vector<String> registerVectorOnline = response.getAllRegisterOnline();
@@ -126,7 +129,7 @@ public class ChatListController implements Initializable {
                 //注册事件handler
                 button.setOnAction(e -> {
                     //目前没有需要做的按钮事件，先空着
-                    if(isOnline(registerVectorOnline,name).equals("在线")){
+                    if (isOnline(registerVectorOnline, name).equals("在线")) {
                         chatButtonActionEvent(name);
                     }
                 });
@@ -144,21 +147,21 @@ public class ChatListController implements Initializable {
     }
 
     public void chatButtonActionEvent(String name) {
-        if (name.equals(registerName)) {
-            NoticeMessage.setText("不能选择与自己对话!");
-        } else {
-            request = new Request(GET_OTHER_ADDRESS, registerName, name);
-            peerThread.setRequest(request);
-            peerThread.setPipedOut(pipedOut);
-            peerThread.notifyPeerThread();
-            try {
+        try {
+            if (name.equals(registerName)) {
+                NoticeMessage.setText("不能选择与自己对话!");
+            } else {
+                request = new Request(GET_OTHER_ADDRESS, registerName, name);
+                peerThread.setRequest(request);
+                peerThread.setPipedOut(pipedOut);
+                peerThread.notifyPeerThread();
                 response = (Response) pipedIn.readObject();
-            } catch (IOException | ClassNotFoundException ex) {
-                ex.printStackTrace();
+                //这里请求到的是目标用户的UDP开放端口号
+                NoticeMessage.setText("请求目标用户... |" + response.getChatP2PEndAddress() + "|");
+                viewAlter.createChatWindow(socket, response.getChatP2PEndAddress(), name);
             }
-            //这里请求到的是目标用户的UDP开放端口号
-            NoticeMessage.setText("请求目标用户... |" + response.getChatP2PEndAddress() + "|");
-            viewAlter.createChatWindow(socket, response.getChatP2PEndAddress(), name);
+        } catch (IOException | ClassNotFoundException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -174,6 +177,7 @@ public class ChatListController implements Initializable {
                 peerThread.setPipedOut(pipedOut);
                 peerThread.notifyPeerThread();
                 response = (Response) pipedIn.readObject();
+                chatTCPThread.close();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -228,4 +232,11 @@ public class ChatListController implements Initializable {
         }
     }
 
+    public void relayModButtonAction(ActionEvent actionEvent) {
+
+    }
+
+    public void udpModButtonAction(ActionEvent actionEvent) {
+
+    }
 }

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
+<?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.Group?>
 
 <AnchorPane prefHeight="700.0" prefWidth="1200.0" stylesheets="chatList.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.p2p.controller.ChatListController">
     <children>
@@ -53,7 +56,13 @@
                 </VBox>
             </center>
             <right>
-                <VBox id="right" prefHeight="453.0" prefWidth="117.0" />
+                <VBox id="right" prefHeight="453.0" prefWidth="117.0">
+               <children>
+                  <ToggleButton fx:id="relayMod" mnemonicParsing="false" onAction="#relayModButtonAction" prefWidth="117.0" text="relay模式" />
+                  <ToggleButton fx:id="udpMod" mnemonicParsing="false" onAction="#udpModButtonAction" prefWidth="117.0" text="UDP模式" />
+                  <CheckBox mnemonicParsing="false" prefWidth="117.0" text="转发模式" />
+                  <CheckBox mnemonicParsing="false" prefWidth="117.0" text="UDP模式" />
+               </children></VBox>
             </right>
             <top>
                 <AnchorPane id="top" prefHeight="74.0" prefWidth="1200.0">
